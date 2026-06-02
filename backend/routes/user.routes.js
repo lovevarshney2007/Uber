@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
-const uerController = require('../controllers/user.controller');
+const userController = require('../controllers/user.controller');
+const authMiddleware = require('../middlewares/auth.middleware');
 
 
 router.post('/register', [
@@ -11,9 +12,17 @@ router.post('/register', [
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
         .matches(/(?=.*[A-Z])(?=.*\d).+/).withMessage('Password must contain at least one uppercase letter and one number')
 ],
- uerController.registerUser
+ userController.registerUser
 );
 
+router.post('/login', [
+    body('email').isEmail().withMessage('Please provide a valid email'),
+    body('password').notEmpty().withMessage('Password is required')
+], userController.loginUser);   
 
+
+router.get('/profile',authMiddleware.authUser, userController.getUserProfile);
+
+router.get('/logout', authMiddleware.authUser, userController.logoutUser);
 
 module.exports = router;
