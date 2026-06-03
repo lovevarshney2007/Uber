@@ -1,29 +1,49 @@
-import {Link} from "react-router-dom"
-import { useState } from "react"
+import {Link,useNavigate} from "react-router-dom"
+import { useState,useContext  } from "react"
+import UserContext from "../context/userContext"
+import { UserDataContext } from "../context/userContext"
+import axios from "axios"
 
 const UserLogin = () => {
   const [email,setEmail] = useState("")
   const [password,setPassword] = useState("")
   const [firstName,setFirstName] = useState("")
   const [lastName,setLastName] = useState("")
-  const [userData,setUserData] = useState({})
+  // const [userData,setUserData] = useState({})
 
+  const { user, setUser } = useContext(UserDataContext)
 
-  const submitHandler = (e) => {
+  const navigate = useNavigate()
+
+  const submitHandler = async (e) => {
     e.preventDefault()
-    setUserData({
+    const newUser = {
       email:email,
       fullName:{
         firstName:firstName,
         lastName:lastName
       },
       password:password
-    })
-    console.log(userData)
-    setEmail("")
+    }
+    console.log(newUser)
+
+     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`, newUser)
+
+     if(response.status === 201){
+      const data = response.data
+
+      setUser(data.newUser)
+      localStorage.setItem('token',data.token)
+
+      alert("User created successfully")
+      navigate("/home")
+      setEmail("")
     setFirstName("")
     setLastName("")
     setPassword("")
+     }
+
+    
   } 
 
   return (
@@ -77,7 +97,7 @@ const UserLogin = () => {
         <button
           className="bg-[#111] text-white font-bold mb-7 rounded px-2 py-2 w-full text-lg placeholder:text-base"
         >
-          Login
+          Create Account
         </button>
 
       </form>
