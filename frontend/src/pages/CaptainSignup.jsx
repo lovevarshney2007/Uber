@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CaptainDataContext } from '../context/CapatainContext'
+import { CaptainDataContext } from '../context/captainContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
@@ -24,22 +24,24 @@ const CaptainSignup = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault()
-    const captainData = {
-      fullname: {
-        firstname: firstName,
-        lastname: lastName
-      },
-      email: email,
-      password: password,
-      vehicle: {
-        color: vehicleColor,
-        plate: vehiclePlate,
-        capacity: vehicleCapacity,
-        vehicleType: vehicleType
-      }
-    }
+   const captainData = {
+  fullName: {
+    firstName: firstName,
+    lastName: lastName
+  },
+  email,
+  password,
+  vehicle: {
+    color: vehicleColor,
+    plateNumber: vehiclePlate,
+    capacity: Number(vehicleCapacity),
+    vehicleType
+  }
+}
 
     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData)
+
+    console.log(response.data)
 
     if (response.status === 201) {
       const data = response.data

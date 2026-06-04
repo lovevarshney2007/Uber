@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { CaptainDataContext } from '../context/CapatainContext'
+import { CaptainDataContext } from '../context/captainContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
