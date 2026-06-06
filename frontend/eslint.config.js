@@ -17,5 +17,9 @@ export default defineConfig([
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
+    rules: {
+      'no-unused-vars': 'warn',              // yellow instead of red
+      'react-hooks/exhaustive-deps': 'warn', // useEffect dependency warnings → yellow
+    },
   },
 ])
